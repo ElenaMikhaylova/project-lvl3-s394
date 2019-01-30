@@ -9,10 +9,11 @@ export const getFileName = (urlSource) => {
   return `${fileName}.html`;
 };
 
-export const loadPage = (urlSource, outputDir) => {
+const loadPage = (urlSource, outputDir) => {
   const filePath = path.join(outputDir, getFileName(urlSource));
-
   return axios.get(urlSource)
     .then(response => fs.writeFile(filePath, response.data))
-    .catch(e => console.log(e));
+    .then(() => filePath);
 };
+
+export default loadPage;

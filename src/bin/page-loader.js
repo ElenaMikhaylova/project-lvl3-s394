@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import program from 'commander';
-import { loadPage } from '..';
+import loadPage from '..';
 
 program
   .description('Load a page.')
@@ -9,6 +9,6 @@ program
   .arguments('<url>')
   .option('--output [value]', 'Output directory', process.cwd())
   .action((url, options) => {
-    loadPage(url, options.output);
+    loadPage(url, options.output).catch(error => console.log('111 ' + error));
   })
   .parse(process.argv);

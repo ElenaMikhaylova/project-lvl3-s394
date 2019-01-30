@@ -8,10 +8,14 @@ publish:
 	npm publish
 
 lint:
-	npm run eslint .
+	npx run eslint .
 
 watch:
 	npm test -- --watch
+
+build:
+	rm -rf dist
+	npm run build
 
 test:
 	npm test
