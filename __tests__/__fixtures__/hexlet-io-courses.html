@@ -17,17 +17,17 @@ window.gon={};gon.hs={"modal":false};gon.applications={};gon.current_user={"id":
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments)};
   gtag('js', new Date());
-  
+
   var config = {};
-  
+
   if (!gon.current_user.isGuest) {
     config['user_id'] = gon.current_user.id;
   }
-  
+
   if (gon.social_signin) {
     config['page_referrer'] = window.location.origin;
   }
-  
+
   gtag('config', gon.google_analytics_key, config);
 </script>
 <script src="https://www.googletagmanager.com/gtag/js?id=UA-1360700-51" async="async"></script>
@@ -50,7 +50,7 @@ window.gon={};gon.hs={"modal":false};gon.applications={};gon.current_user={"id":
       }
     }
   }
-  
+
   Rollbar.configure({
     payload: {
       person: gon.current_user

@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 
 import program from 'commander';
-import pageLoad from '..';
+import { loadPage } from '..';
 
 program
   .description('Load a page.')
   .version('0.0.1')
   .arguments('<url>')
-  .option('--output [value]', 'Output directory')
+  .option('--output [value]', 'Output directory', process.cwd())
   .action((url, options) => {
-    pageLoad(url, options.output);
+    loadPage(url, options.output);
   })
   .parse(process.argv);
