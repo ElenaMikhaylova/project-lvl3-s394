@@ -9,6 +9,6 @@ program
   .arguments('<url>')
   .option('--output [value]', 'Output directory', process.cwd())
   .action((url, options) => {
-    loadPage(url, options.output).catch(error => console.log('111 ' + error));
+    loadPage(url, options.output).catch(error => console.log(error));
   })
   .parse(process.argv);

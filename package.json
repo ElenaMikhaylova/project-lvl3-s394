@@ -23,7 +23,8 @@
   "author": "Elena Mikhaylova",
   "license": "ISC",
   "jest": {
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "testPathIgnorePatterns": ["__fixtures__"]
   },
   "bugs": {
     "url": "https://github.com/ElenaMikhaylova/project-lvl3-s394/issues"

@@ -21,13 +21,13 @@ beforeEach(async () => {
 });
 
 test('#get', async () => {
-  const content = await fs.readFile(path.join(__dirname, '__fixtures__', 'hexlet-io-courses.html'));
+  const content = await fs.readFile(path.join(__dirname, '__fixtures__', 'hexlet-io-courses.html'), 'utf-8');
 
   nock(hostname)
     .get(pathname)
     .reply(200, content);
 
   const loadFileName = await loadPage(urlSource, tmpDir);
-  const expectedHtml = await fs.readFile(loadFileName);
+  const expectedHtml = await fs.readFile(loadFileName, 'utf-8');
   expect(expectedHtml).toEqual(content);
 });
