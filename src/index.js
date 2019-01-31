@@ -27,7 +27,7 @@ const processHtml = (html, resourcesDir) => {
     const currentLinks = [];
     $(name).filter(function () {
       const urlCurrent = $(this).attr(typeLink);
-      return urlCurrent && !url.parse(urlCurrent).host && urlCurrent.slice(0,2) !== '//';
+      return urlCurrent && !url.parse(urlCurrent).host && urlCurrent.slice(0, 2) !== '//';
     }).map(function (index) {
       const link = $(this).attr(typeLink);
       currentLinks[index] = link;
@@ -49,8 +49,10 @@ const loadPage = (urlSource, outputDir) => {
     .then((response) => {
       const { updatedHtml, links } = processHtml(response.data, dirResourcesName);
       dataHtml = updatedHtml;
-      return Promise.all(links.map(link => axios.get(new URL(link, urlOrigin).toString(), { responseType: 'arraybuffer' })
-        .then(result => fs.writeFile(path.join(dirResourcesName, getFileName(link)), result.data))));
+      return Promise.all(links.map(link => axios.get(new URL(link, urlOrigin).toString(),
+        { responseType: 'arraybuffer' })
+        .then(result => fs.writeFile(path.join(dirResourcesName, getFileName(link)),
+          result.data))));
     })
     .then(() => fs.writeFile(filePath, dataHtml))
     .then(() => filePath);
