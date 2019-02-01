@@ -11,8 +11,16 @@ axios.defaults.adapter = httpAdapter;
 const hostname = 'https://hexlet.io';
 const pathname = '/courses';
 const urlSource = `${hostname}${pathname}`;
-const pathFileHtml = path.join(__dirname, '__fixtures__', 'hexlet-io-courses.html');
-const pathFileJs = path.join(__dirname, '__fixtures__/hexlet-io-courses_files/cdn-cgi-scripts-5c5dd728-cloudflare-static-email-decode-min.js');
+
+const fixturesDir = path.join(__dirname, '__fixtures__');
+const originalFilePath = path.join(fixturesDir, 'original.html');
+const resultFilePath = path.join(fixturesDir, 'hexlet-io-courses.html');
+const assetsDir = 'hexlet-io-courses_files';
+const assets = [
+  { name: 'cdn-cgi-scripts-email-decode-min.js', url: '/cdn-cgi/scripts/email-decode.min.js' },
+  { name: 'modules-css-gray-arrows.css', url: '/modules/css/gray-arrows.css' },
+  { name: 'modules-images-next.png', url: '/modules/images/next.png' },
+];
 
 describe('get html', () => {
   let tmpDir;
@@ -22,21 +30,29 @@ describe('get html', () => {
 
     nock(hostname)
       .get(pathname)
-      .replyWithFile(200, pathFileHtml);
+      .replyWithFile(200, originalFilePath);
 
-    nock(hostname)
-      .get('/cdn-cgi-scripts-5c5dd728-cloudflare-static-email-decode-min.js')
-      .replyWithFile(200, pathFileJs);
+    assets.forEach((asset) => {
+      nock(hostname)
+        .get(asset.url)
+        .replyWithFile(200, path.join(fixturesDir, assetsDir, asset.name));
+    });
   });
 
   beforeEach(async () => {
     tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), path.sep));
   });
 
-  it('#links', async () => {
-    const expectedHtml = await fs.readFile(pathFileHtml, 'utf-8');
+  test('#html with local links', async () => {
     const loadFileName = await loadPage(urlSource, tmpDir);
-    const received = await fs.readFile(loadFileName, 'utf-8');
-    expect(received).toEqual(expectedHtml);
+    const expectedHtml = await fs.readFile(resultFilePath);
+    const receivedHtml = await fs.readFile(loadFileName);
+    expect(receivedHtml).toEqual(expectedHtml);
+
+//    assets.forEach(async (asset) => {
+//      const expected = await fs.readFile(path.join(fixturesDir, assetsDir, asset.name));
+//      const received = await fs.readFile(path.join(tmpDir, assetsDir, asset.name));
+//      expect(received).toEqual(expected);
+//    });
   });
 });

@@ -24,7 +24,9 @@
   "license": "ISC",
   "jest": {
     "testEnvironment": "node",
-    "testPathIgnorePatterns": ["__fixtures__"]
+    "testPathIgnorePatterns": [
+      "__fixtures__"
+    ]
   },
   "bugs": {
     "url": "https://github.com/ElenaMikhaylova/project-lvl3-s394/issues"
@@ -38,6 +40,7 @@
     "@babel/preset-flow": "^7.0.0",
     "babel-eslint": "^10.0.1",
     "babel-jest": "^24.0.0",
+    "debug": "^4.1.1",
     "eslint": "^5.12.1",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.15.0",

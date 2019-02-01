@@ -1,0 +1,111 @@
+/*
+ * Module mod_newscalendar For Joomla 
+ * Version		: 1.0.0
+ * Created by	: Jesus Vargas
+ * License : GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
+ */
+
+div.newscalendar {
+	max-width: 250px;
+	overflow: visible;
+}
+table.nc-header, table.nc-body {
+	border: none;
+	width: 100%;
+}
+table.nc-header tr, table.nc-body tr, table.nc-header td, table.nc-body td  { border: none; }	
+table.nc-header {
+	margin: 5px 0;
+}
+table.nc-header a {
+	background: url(../assets/arrows-gray.png) no-repeat 0 100%;
+	height: 16px;
+	display: block;
+	width: 16px;
+}
+table.nc-header a.back-mth { background-position: 0 -32px; }
+table.nc-header a.fwd-mth { background-position: 0 -16px; }
+table.nc-header a.fwd-yr { background-position: 0 0; }
+table.nc-header .monthname, table.nc-header .yearname, table.nc-body .dayname {
+	font-weight: bold;
+}
+.newscalendar span.weekday1 {}
+.newscalendar span.weekday2 {}
+.newscalendar span.weekday3 {}
+.newscalendar span.weekday4 {}
+.newscalendar span.weekday5 {}
+.newscalendar span.weekday6 {
+	color: #FF3D3D;
+}
+.newscalendar span.weekday7 {
+	color: #FF3D3D;
+}
+.newscalendar span.outofmonth {
+	color: #CCCCCC;
+}
+.newscalendar span.today {
+	font-weight: bold;
+}
+.newscalendar span.today ul li {
+	font-weight: normal;
+}
+.newscalendar span.nc-day { 
+	position: relative;
+	display: block;
+	padding: 3px 2px;
+	text-align: center;
+}
+.newscalendar .nc-items {
+	background: url(../assets/opacity.png) repeat;
+	position: absolute;
+	left: auto!important;
+	right: auto!important;
+	top: auto!important;
+	bottom: 15px!important;
+	font-size: 0.8em;
+	line-height: 1.1em;
+	margin: 0!important;
+	padding: 5px 10px;
+	min-width: 180px;
+	max-width:260px;
+	list-style: none;
+	border: 1px solid #000;
+	text-align: left;
+	z-index: 1000;
+	box-shadow: 0 0 8px #333;
+	border-radius: 5px;
+	display: none;
+}
+.newscalendar .week1 ul.nc-items, .newscalendar .week2 ul.nc-items {
+	top: 15px!important;
+	bottom: auto!important;
+}
+.newscalendar span.relday1 ul.nc-items { left: 0!important; }
+.newscalendar span.relday2 ul.nc-items { left: -100%!important; }
+.newscalendar span.relday3 ul.nc-items { left: -200%!important; }
+.newscalendar span.relday4 ul.nc-items { left: -250%!important; }
+.newscalendar span.relday5 ul.nc-items { right: -200%!important; }
+.newscalendar span.relday6 ul.nc-items { right: -100%!important; }
+.newscalendar span.relday7 ul.nc-items { right: 0!important; }
+
+span.nc-day ul.nc-items li  { 
+	padding: 3px 5px;
+}
+span.nc-day ul.nc-items li a  { 
+	background: none;
+	display: block;
+	color: #FFF;
+}
+span.nc-day ul.nc-items li a:hover  { 
+	color: #ff543e;
+}
+.hasitems:hover .nc-items { 
+	display: block;
+}
+.newscalendar span.hasitems {
+	cursor: pointer;
+	background: url(../assets/dot.png) no-repeat 50% 90%;
+}
+.bgimgcall {
+	display: none;
+}
