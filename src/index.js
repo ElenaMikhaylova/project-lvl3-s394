@@ -4,6 +4,9 @@ import path from 'path';
 import url from 'url';
 import _ from 'lodash';
 import cheerio from 'cheerio';
+import debug from 'debug';
+
+const log = debug('page-loader');
 
 const getFileName = (urlSource, extFile) => {
   if (extFile) {
@@ -46,6 +49,7 @@ const processHtml = (html, assetsDir) => {
 
 const loadPage = (urlSource, outputDir) => {
   const filePath = path.join(outputDir, getFileName(urlSource, '.html'));
+  log('result filepath %o', filePath);
   const assetsDir = getFileName(urlSource, '_files');
   const { origin } = new URL(urlSource);
   let dataHtml;
@@ -54,9 +58,12 @@ const loadPage = (urlSource, outputDir) => {
     .then(() => axios.get(urlSource))
     .then((response) => {
       const { updatedHtml, links } = processHtml(response.data, assetsDir);
+      log('links %o', links);
+      log('updated html %s', updatedHtml);
       dataHtml = updatedHtml;
       const getPromises = links.map((link) => {
         const currentUrl = new URL(link, origin).toString();
+        log('current asset url %o', currentUrl);
         return axios.get(currentUrl, { responseType: 'arraybuffer' });
       });
       return Promise.all(getPromises);
@@ -65,6 +72,7 @@ const loadPage = (urlSource, outputDir) => {
       const writePromises = results.map((result) => {
         const currentFileName = getFileName(result.request.path);
         const currentFilePath = path.join(outputDir, assetsDir, currentFileName);
+        log('current asset filepath %o', currentFilePath);
         return fs.writeFile(currentFilePath, result.data);
       });
       return Promise.all(writePromises);
