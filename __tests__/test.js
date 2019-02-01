@@ -49,10 +49,10 @@ describe('get html', () => {
     const receivedHtml = await fs.readFile(loadFileName);
     expect(receivedHtml).toEqual(expectedHtml);
 
-//    assets.forEach(async (asset) => {
-//      const expected = await fs.readFile(path.join(fixturesDir, assetsDir, asset.name));
-//      const received = await fs.readFile(path.join(tmpDir, assetsDir, asset.name));
-//      expect(received).toEqual(expected);
-//    });
+    assets.forEach(async (asset) => {
+      const expected = await fs.readFile(path.join(fixturesDir, assetsDir, asset.name));
+      const received = await fs.readFile(path.join(tmpDir, assetsDir, asset.name));
+      expect(received).toEqual(expected);
+    });
   });
 });

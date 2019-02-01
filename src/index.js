@@ -57,17 +57,15 @@ const loadPage = (urlSource, outputDir) => {
       dataHtml = updatedHtml;
       const getPromises = links.map((link) => {
         const currentUrl = new URL(link, origin).toString();
-        return {
-          content: axios.get(currentUrl, { responseType: 'arraybuffer' }),
-          fileName: getFileName(link),
-        };
+        return axios.get(currentUrl, { responseType: 'arraybuffer' });
       });
       return Promise.all(getPromises);
     })
     .then((results) => {
       const writePromises = results.map((result) => {
-        const currentFilePath = path.join(outputDir, assetsDir, result.fileName);
-        return fs.writeFile(currentFilePath, result.content.data);
+        const currentFileName = getFileName(result.request.path);
+        const currentFilePath = path.join(outputDir, assetsDir, currentFileName);
+        return fs.writeFile(currentFilePath, result.data);
       });
       return Promise.all(writePromises);
     })
