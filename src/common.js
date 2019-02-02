@@ -3,15 +3,13 @@ import url from 'url';
 import _ from 'lodash';
 
 export const createErrorMessage = (error) => {
-  let errorMessage;
   if (error.code) {
-    errorMessage = error.message;
-  // } else if (error.response.status === 404) {
-  //   errorMessage = `${error.response.statusText} ${error.response.config.url}`;
-  } else {
-    errorMessage = error;
+    return error.message;
   }
-  return errorMessage;
+  if (error.response.status === 404) {
+    return `${error.response.status} Not found: ${error.response.request.path}`;
+  }
+  return error;
 };
 
 export const getFileName = (urlSource, extFile) => {

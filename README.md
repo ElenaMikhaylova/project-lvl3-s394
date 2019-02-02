@@ -18,3 +18,5 @@ Errors:<br>
 <a href="https://asciinema.org/a/VHXu25bQRfGOiL4Qa23c1mUzT" target="_blank"><img src="https://asciinema.org/a/VHXu25bQRfGOiL4Qa23c1mUzT.svg" /></a>
 
 <a href="https://asciinema.org/a/93ra7dNlu5QlBrE1snnhMDWBs" target="_blank"><img src="https://asciinema.org/a/93ra7dNlu5QlBrE1snnhMDWBs.svg" /></a>
+
+<a href="https://asciinema.org/a/NlafZpQitA3kRXuCPbpkpmYH7" target="_blank"><img src="https://asciinema.org/a/NlafZpQitA3kRXuCPbpkpmYH7.svg" /></a>

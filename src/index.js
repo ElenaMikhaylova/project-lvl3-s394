@@ -45,7 +45,7 @@ const loadPage = (urlSource, outputDir) => {
   const assetsDir = getFileName(urlSource, '_files');
   const { origin } = new URL(urlSource);
   let dataHtml;
-  const tasks = new Listr();
+  const tasks = new Listr([], { concurrent: true });
 
   return fs.stat(outputDir)
     .then(() => fs.mkdir(path.join(outputDir, assetsDir)))
