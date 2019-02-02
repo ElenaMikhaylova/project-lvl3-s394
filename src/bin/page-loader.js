@@ -9,6 +9,12 @@ program
   .arguments('<url>')
   .option('--output [value]', 'Output directory', process.cwd())
   .action((url, options) => {
-    loadPage(url, options.output).catch(error => console.log(error));
+    loadPage(url, options.output)
+      .then(() => console.log(`Complete loading: ${url}`))
+      .catch((e) => {
+        console.error('End with error:');
+        console.error(e.message);
+        process.exit(1);
+      });
   })
   .parse(process.argv);

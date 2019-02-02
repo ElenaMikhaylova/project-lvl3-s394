@@ -8,6 +8,18 @@ import debug from 'debug';
 
 const log = debug('page-loader');
 
+const createErrorMessage = (error) => {
+  let errorMessage;
+  if (error.code) {
+    errorMessage = error.message;
+  } else if (error.response.status === 404) {
+    errorMessage = `${error.response.statusText} ${error.response.config.url}`;
+  } else {
+    errorMessage = error;
+  }
+  return errorMessage;
+};
+
 const getFileName = (urlSource, extFile) => {
   if (extFile) {
     const { hostname, pathname } = url.parse(urlSource);
@@ -54,20 +66,21 @@ const loadPage = (urlSource, outputDir) => {
   const { origin } = new URL(urlSource);
   let dataHtml;
 
-  return fs.mkdir(path.join(outputDir, assetsDir))
+  return fs.stat(outputDir)
+    .then(() => fs.mkdir(path.join(outputDir, assetsDir)))
     .then(() => axios.get(urlSource))
     .then((response) => {
       const { updatedHtml, links } = processHtml(response.data, assetsDir);
       log('links %o', links);
-      log('updated html %s', updatedHtml);
       dataHtml = updatedHtml;
-      const getPromises = links.map((link) => {
+      const requests = links.map((link) => {
         const currentUrl = new URL(link, origin).toString();
         log('current asset url %o', currentUrl);
         return axios.get(currentUrl, { responseType: 'arraybuffer' });
       });
-      return Promise.all(getPromises);
+      return Promise.all(requests);
     })
+
     .then((results) => {
       const writePromises = results.map((result) => {
         const currentFileName = getFileName(result.request.path);
@@ -78,7 +91,11 @@ const loadPage = (urlSource, outputDir) => {
       return Promise.all(writePromises);
     })
     .then(() => fs.writeFile(filePath, dataHtml))
-    .then(() => filePath);
+    .then(() => filePath)
+    .catch((e) => {
+      log(createErrorMessage(e));
+      throw new Error(createErrorMessage(e));
+    });
 };
 
 export default loadPage;

@@ -13,3 +13,6 @@ Example
 <pre>$ page-loader https://hexlet.io/courses</pre>
 
 <a href="https://asciinema.org/a/MH1EpTRTb4BRYGPWp7azCqZ9o" target="_blank"><img src="https://asciinema.org/a/MH1EpTRTb4BRYGPWp7azCqZ9o.svg" /></a>
+
+Errors:
+<a href="https://asciinema.org/a/VHXu25bQRfGOiL4Qa23c1mUzT" target="_blank"><img src="https://asciinema.org/a/VHXu25bQRfGOiL4Qa23c1mUzT.svg" /></a>

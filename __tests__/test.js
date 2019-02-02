@@ -56,3 +56,47 @@ describe('get html', () => {
     });
   });
 });
+
+describe('errors', () => {
+  let tmpDir;
+
+  beforeAll(() => {
+    nock.disableNetConnect();
+
+    nock(hostname)
+      .get(pathname)
+      .replyWithFile(200, originalFilePath);
+
+    nock(hostname)
+      .get('/nopage')
+      .reply(404);
+  });
+
+  beforeEach(async () => {
+    tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), path.sep));
+  });
+
+  test('#error code 404', async () => {
+    try {
+      await loadPage(`${hostname}/nopage`, tmpDir);
+    } catch (e) {
+      expect(e).toThrowErrorMatchingSnapshot();
+    }
+  });
+
+  test('#error assets code 404', async () => {
+    try {
+      await loadPage(urlSource, tmpDir);
+    } catch (e) {
+      expect(e).toThrowErrorMatchingSnapshot();
+    }
+  });
+
+  test('#error wrong output directory', async () => {
+    try {
+      await loadPage(urlSource, `${tmpDir}/wrong`);
+    } catch (e) {
+      expect(e).toThrowErrorMatchingSnapshot();
+    }
+  });
+});
