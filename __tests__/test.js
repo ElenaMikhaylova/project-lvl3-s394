@@ -62,14 +62,24 @@ describe('errors', () => {
 
   beforeAll(() => {
     nock.disableNetConnect();
-
     nock(hostname)
       .get(pathname)
       .replyWithFile(200, originalFilePath);
 
+    assets.forEach((asset) => {
+      nock(hostname)
+        .get(asset.url)
+        .reply(404);
+    });
     nock(hostname)
       .get('/nopage')
       .reply(404);
+
+    assets.forEach((asset) => {
+      nock(hostname)
+        .get(`/nopage${asset.url}`)
+        .reply(404);
+    });
   });
 
   beforeEach(async () => {

@@ -5,30 +5,10 @@ import url from 'url';
 import _ from 'lodash';
 import cheerio from 'cheerio';
 import debug from 'debug';
+import Listr from 'listr';
+import { createErrorMessage, getFileName } from './common';
 
 const log = debug('page-loader');
-
-const createErrorMessage = (error) => {
-  let errorMessage;
-  if (error.code) {
-    errorMessage = error.message;
-  } else if (error.response.status === 404) {
-    errorMessage = `${error.response.statusText} ${error.response.config.url}`;
-  } else {
-    errorMessage = error;
-  }
-  return errorMessage;
-};
-
-const getFileName = (urlSource, extFile) => {
-  if (extFile) {
-    const { hostname, pathname } = url.parse(urlSource);
-    const fileName = `${hostname}${pathname}`;
-    return `${fileName.replace(/\W/g, '-')}${extFile}`;
-  }
-  const { dir, name, ext } = path.parse(urlSource);
-  return `${_.trim(path.join(dir, name), '/').replace(/\W/g, '-')}${ext}`;
-};
 
 const processHtml = (html, assetsDir) => {
   const $ = cheerio.load(html);
@@ -65,6 +45,7 @@ const loadPage = (urlSource, outputDir) => {
   const assetsDir = getFileName(urlSource, '_files');
   const { origin } = new URL(urlSource);
   let dataHtml;
+  const tasks = new Listr();
 
   return fs.stat(outputDir)
     .then(() => fs.mkdir(path.join(outputDir, assetsDir)))
@@ -73,20 +54,26 @@ const loadPage = (urlSource, outputDir) => {
       const { updatedHtml, links } = processHtml(response.data, assetsDir);
       log('links %o', links);
       dataHtml = updatedHtml;
-      const requests = links.map((link) => {
+      links.forEach((link) => {
         const currentUrl = new URL(link, origin).toString();
         log('current asset url %o', currentUrl);
-        return axios.get(currentUrl, { responseType: 'arraybuffer' });
+        tasks.add({
+          title: currentUrl,
+          task: ctx => axios
+            .get(currentUrl, { responseType: 'arraybuffer' })
+            .then((responseAsset) => {
+              ctx[getFileName(link)] = responseAsset.data;
+            }),
+        });
       });
-      return Promise.all(requests);
+      return tasks.run({});
     })
 
     .then((results) => {
-      const writePromises = results.map((result) => {
-        const currentFileName = getFileName(result.request.path);
+      const writePromises = Object.keys(results).map((currentFileName) => {
         const currentFilePath = path.join(outputDir, assetsDir, currentFileName);
         log('current asset filepath %o', currentFilePath);
-        return fs.writeFile(currentFilePath, result.data);
+        return fs.writeFile(currentFilePath, _.get(results, currentFileName));
       });
       return Promise.all(writePromises);
     })
